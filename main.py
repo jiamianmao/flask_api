@@ -1,16 +1,16 @@
 """
     作者：SpawN
-    日期：2019/4/29 11:29
+    日期：2019/4/30 16:21
 """
 from werkzeug.exceptions import HTTPException
-
-from app.index import create_app
+from app import create_app
 from app.libs.error import APIException
 from app.libs.error_code import ServerError
 
 app = create_app()
 
 
+# 捕获未知错误
 @app.errorhandler(Exception)
 def framework_error(e):
     if isinstance(e, APIException):
@@ -25,7 +25,6 @@ def framework_error(e):
             return ServerError()
         else:
             raise e
-
 
 if __name__ == '__main__':
     app.run(debug=True)

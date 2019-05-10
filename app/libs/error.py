@@ -1,8 +1,8 @@
 """
     作者：SpawN
-    日期：2019/4/30 10:09
+    日期：2019/5/6 16:46
 """
-from flask import request, json
+from flask import request, json, Response
 from werkzeug.exceptions import HTTPException
 
 
@@ -19,16 +19,20 @@ class APIException(HTTPException):
         if msg:
             self.msg = msg
 
+        # r = {
+        #     "haha": "xixi"
+        # }
+        # response = Response(json.dumps(r), mimetype='application/json')
+        # super(APIException, self).__init__(msg, response)
         super(APIException, self).__init__(msg, None)
 
     def get_body(self, environ=None):
-        body = dict(
-            msg = self.msg,
-            error_code = self.error_code,
-            request = request.method + ' ' + self.get_url_no_param()
-        )
-        text = json.dumps(body)
-        return text
+        body = {
+            "msg": self.msg,
+            "error_msg": self.error_code,
+            "request": request.method + ' ' + self.get_url_no_param()
+        }
+        return json.dumps(body)
 
     def get_headers(self, environ=None):
         """Get a list of headers."""
